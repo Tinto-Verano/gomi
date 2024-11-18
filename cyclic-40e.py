@@ -2,6 +2,7 @@
 # The learning rate set in the cyclic schedule is the initial learning rate
 # rather than the max learning rate. Since the target_ratio is (10, 1e-4),
 # the learning rate will change from 0.0018 to 0.018, than go to 0.0018*1e-4
+# 초기 학습률
 lr = 0.0018
 # The optimizer follows the setting in SECOND.Pytorch, but here we use
 # the official AdamW optimizer implemented by PyTorch.
