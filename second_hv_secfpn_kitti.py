@@ -36,40 +36,13 @@ model = dict(
         type='SECONDFPN',
         in_channels=[128, 256],
         upsample_strides=[1, 2],
-        out_channels=[256, 256]),
-    
-    bbox_head=dict(
-        type='Anchor3DHead',
-        # 예측할 클래스 개수 (Pedestrian, Cyclist, Car)
-        num_classes=3,
-        in_channels=512,
-        feat_channels=512,
-        use_direction_classifier=True,
-        anchor_generator=dict(
-            type='Anchor3DRangeGenerator',
-            ranges=[
-                [0, -40.0, -0.6, 70.4, 40.0, -0.6],
-                [0, -40.0, -0.6, 70.4, 40.0, -0.6],
-                [0, -40.0, -1.78, 70.4, 40.0, -1.78],
-            ],
-            sizes=[[0.8, 0.6, 1.73], [1.76, 0.6, 1.73], [3.9, 1.6, 1.56]],
-            # 0도~90도로 회전된 Anchor
-            rotations=[0, 1.57],
-            reshape_out=False),
-        # 예측 시 작은 각도 차이를 선호하도록 설정
-        # 방향 뒤집히는 문제 방지
-        diff_rad_by_sin=True,
-        bbox_coder=dict(type='DeltaXYZWLHRBBoxCoder'),
-        # FocalLoss
-        # 클래스 불균형 문제 해결
-        # 학습이 어려운(hard) 샘플에 더 큰 가중치를 부여
-        # 모델이 이미 잘 예측한 easy 샘플은 손실을 낮춰 학습 효율성 높
+        out_c임
         loss_cls=dict(
             type='mmdet.FocalLoss',
             use_sigmoid=True,
             # hard sample에 더 많은 가중치를 줌
             gamma=2.0,
-            # positive class에 더 높은 가중치를 부여해 클래스 불균형 보완완
+            # positive class에 더 높은 가중치를 부여해 클래스 불균형 보완
             alpha=0.25,
             loss_weight=1.0),
         # 오차가 작으면 L2처럼 작동 크면 L1처럼 작동하는 
