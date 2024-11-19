@@ -16,7 +16,9 @@ param_scheduler = [
     # During the first 16 epochs, learning rate increases from 0 to lr * 10
     # during the next 24 epochs, learning rate decreases from lr * 10 to
     # lr * 1e-4
+    # 16 에포크까지
     dict(
+        # 학습률을 코사인 곡선을 따라 조정
         type='CosineAnnealingLR',
         T_max=16,
         eta_min=lr * 10,
@@ -24,6 +26,7 @@ param_scheduler = [
         end=16,
         by_epoch=True,
         convert_to_iter_based=True),
+    # 40 에포크까지
     dict(
         type='CosineAnnealingLR',
         T_max=24,
@@ -32,6 +35,7 @@ param_scheduler = [
         end=40,
         by_epoch=True,
         convert_to_iter_based=True),
+    
     # momentum scheduler
     # During the first 16 epochs, momentum increases from 0 to 0.85 / 0.95
     # during the next 24 epochs, momentum increases from 0.85 / 0.95 to 1
@@ -61,8 +65,4 @@ train_cfg = dict(by_epoch=True, max_epochs=40, val_interval=1)
 val_cfg = dict()
 test_cfg = dict()
 
-# Default setting for scaling LR automatically
-#   - `enable` means enable scaling LR automatically
-#       or not by default.
-#   - `base_batch_size` = (8 GPUs) x (6 samples per GPU).
 auto_scale_lr = dict(enable=False, base_batch_size=48)
