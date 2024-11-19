@@ -7,6 +7,7 @@ model = dict(
     type='VoxelNet',
     data_preprocessor=dict(
         type='Det3DDataPreprocessor',
+        # PointCloud를 Voxel로 만들
         voxel=True,
         voxel_layer=dict(
             # 각 Voxel에 저장할 최대 점 개수 
@@ -66,14 +67,16 @@ model = dict(
         loss_cls=dict(
             type='mmdet.FocalLoss',
             use_sigmoid=True,
+            # hard sample에 더 많은 가중치를 줌
             gamma=2.0,
+            # positive class에 더 높은 가중치를 부여해 클래스 불균형 보완완
             alpha=0.25,
             loss_weight=1.0),
         # 오차가 작으면 L2처럼 작동 크면 L1처럼 작동하는 
         # SmoothL1Loss
         loss_bbox=dict(
             type='mmdet.SmoothL1Loss', beta=1.0 / 9.0, loss_weight=2.0),
-        # CrossEntropy를 사용해 방향을 에
+        # CrossEntropy를 사용해 방향을 예측
         loss_dir=dict(
             type='mmdet.CrossEntropyLoss', use_sigmoid=False,
             loss_weight=0.2)),
