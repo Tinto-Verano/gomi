@@ -18,6 +18,9 @@ class KanjiViewModel(application: Application) : AndroidViewModel(application) {
     private val _memorizedKanji = MutableStateFlow<Set<String>>(emptySet())
     val memorizedKanji: StateFlow<Set<String>> = _memorizedKanji
 
+    private val _lastGridIndex = MutableStateFlow(0)
+    val lastGridIndex: StateFlow<Int> = _lastGridIndex
+
     private val prefs = application.getSharedPreferences("kanji_prefs", Context.MODE_PRIVATE)
 
     init {
@@ -28,6 +31,8 @@ class KanjiViewModel(application: Application) : AndroidViewModel(application) {
 
             val fromSong = loaded.filter { it.song.isNotBlank() }.map { it.kanji }.toSet()
             _memorizedKanji.value = saved union fromSong
+
+            _lastGridIndex.value = prefs.getInt("last_grid_index", 0)
         }
     }
 
@@ -40,5 +45,10 @@ class KanjiViewModel(application: Application) : AndroidViewModel(application) {
 
     fun isMemorized(kanji: String): Boolean {
         return _memorizedKanji.value.contains(kanji)
+    }
+
+    fun saveScrollPosition(index: Int) {
+        _lastGridIndex.value = index
+        prefs.edit().putInt("last_grid_index", index).apply()
     }
 }
